@@ -41,6 +41,47 @@ st.subheader("📊 구별 평균 휘발유 / 경유 가격")
 mean_prices = df.groupby("지역")[["휘발유", "경유"]].mean().round(1)
 st.bar_chart(mean_prices)
 
+#faq
+st.subheader("FAQ-자주 묻는 질문")
+faq_list = [
+    {
+        "Q": "서울시 외 도시들은 제공하지 않나요?",
+        "A" : "현재는 서울시만 제공합니다."
+    },
+    {
+        "Q": "모바일에서 사용 가능한가요?",
+        "A" : "현재는 PC 화면에 최적화되어 있으며, 모바일 최적화는 준비 중입니다"
+    },
+    {
+        "Q": "알뜰주유소란 무엇인가요",
+        "A" : "대한민국 정부가 추진하는 주유소 사업이다. 원래 목적은 대형 정유사의 독과점 상황인 석유 제품의 소매 유통 방식을 개선하여 더욱 저렴한 가격에 기름을 공급하겠다는 것이었으나, 현재 한국석유공사의 자영 알뜰 주유소, 한국도로공사의 고속도로 주유소(ex-OIL), 농업협동조합의 농협 주유소(NH-OIL)라는 세 가지 형태로 전국에 약 1,180 곳이 영업중이다."
+    },
+    {
+      "Q": "LPG, 고급휘발유 가격 정보는 어디서 얻을 수 있나요?",
+        "A" : "오피넷 홈페이지(https://www.opinet.co.kr/searRgSelect.do) 에서 얻을 수 있습니다."
+    },
+    {
+      "Q": "주유소 브랜드별 카드 혜택이 알고 싶어요.",
+        "A" : "**[SK주유소](https://www.enclean.com/benefit/card)**"
+              "**[GS주유소](https://gscenergyplus.com/creditcard/introduction)**"
+              "**[현대오일뱅크](http://www.oilbankcard.com/m2012/front/creditNew.do)**"
+              "**[S-OIL](https://www.s-oilbonus.com/bcard/A-Bcard-Guide-001)"
+    }
+]
+
+for faq in faq_list:
+    with st.expander (faq["Q"]):
+        st.write(faq["A"])
+
+##유가 가격 초기화 시간
+##유가 세금 포함 여부
+
+
+
+
+
+
+
 # CSV 다운로드
 st.download_button(
     label="CSV 다운로드",
