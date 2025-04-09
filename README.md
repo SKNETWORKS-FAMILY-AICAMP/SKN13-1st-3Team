@@ -49,7 +49,7 @@
 ## 3. 🔧 기술 스택
 - 항목	기술
 - 언어	Python
-- 웹 크롤링	eautifulSoup, Selenium
+- 웹 크롤링	BeautifulSoup, Selenium
 - 데이터 저장	Pandas, CSV, mysql
 - 시각화	Streamlit, Plotly, pydeck
 - 배포	Streamlit Cloud 또는 로컬 실행
