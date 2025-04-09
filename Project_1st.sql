@@ -5,12 +5,13 @@ create table gas_staion (
         id INT AUTO_INCREMENT PRIMARY KEY,
         station_name varchar(20),
         address varchar(40),
-        brand varchar(10),
         region varchar(5),
+        brand varchar(10),
         gasolin_price INT,
         diesel_price INT,
         self_service BOOLEAN,
         car_wash BOOLEAN,
         convenience_store BOOLEAN,
-        24_hour BOOLEAN
+        hours_24 BOOLEAN
         );
+show databases;
