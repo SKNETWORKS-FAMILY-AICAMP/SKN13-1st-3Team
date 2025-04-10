@@ -28,7 +28,11 @@ conn = pymysql.connect(
 import pandas as pd
 
 # SQL 쿼리 실행하여 데이터 가져오기
-query = "SELECT * FROM gas_station"  # 테이블 이름이 'gas_stations'라고 가정
+query = """
+    SELECT gs.*, b.brand_name 
+    FROM gas_station gs
+    JOIN brand b ON gs.brand_id = b.brand_id
+"""
 df = pd.read_sql(query, conn)
 
 # 연결 종료
