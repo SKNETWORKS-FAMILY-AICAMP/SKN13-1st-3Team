@@ -71,7 +71,8 @@ filtered = filtered[filtered['diesel_price'] <= price_diesel]
 
 
 # 검색 기능 추가
-search_term = st.text_input("🔍주유소 검색", placeholder="주유소 이름, 주소, 브랜드로 검색")
+st.markdown("### 🔍주유소 검색")
+search_term = st.text_input("", placeholder="주유소 이름, 주소, 브랜드로 검색", label_visibility="collapsed")
 
 if search_term:
     # 대소문자 구분 없이 검색
