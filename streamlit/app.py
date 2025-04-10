@@ -1,5 +1,11 @@
 import streamlit as st
 import pandas as pd
+import pymysql
+import folium
+from streamlit_folium import folium_static
+from geopy.geocoders import Nominatim
+import time
+import random
 
 st.set_page_config(page_title="서울시 주유소 대시보드", layout="wide")
 st.title("서울시 주유소 정보 대시보드")
@@ -9,8 +15,6 @@ st.title("서울시 주유소 정보 대시보드")
 
 # # 데이터 불러오기
 # df = pd.read_csv(csv_path)
-
-import pymysql
 
 conn = pymysql.connect(
         host='192.168.0.45', # DB 주소 (예: '127.0.0.1' 또는 AWS RDS 주소)
@@ -66,7 +70,7 @@ filtered = filtered[filtered['gasoline_price'] <= price_gasoline]
 filtered = filtered[filtered['diesel_price'] <= price_diesel]
 
 # 검색 기능 추가
-search_term = st.text_input("🔍 주유소 검색", placeholder="주유소 이름, 주소, 브랜드로 검색")
+search_term = st.text_input("🔍주유소 검색", placeholder="주유소 이름, 주소, 브랜드로 검색")
 
 if search_term:
     # 대소문자 구분 없이 검색
@@ -77,9 +81,67 @@ if search_term:
     )
     filtered = filtered[search_filter]
 
+# 브랜드별 색상 매핑 함수
+def get_brand_color(brand):
+    # 브랜드별 고정 색상 매핑
+    brand_colors = {
+        'GS칼텍스': 'red',
+        'S-OIL': 'blue',
+        'SK에너지': 'green',
+        '현대오일뱅크': 'purple',
+        '알뜰주유소': 'orange',
+        '자가상표': 'gray',
+        '농협': 'pink',
+        '자가상표(알뜰)': 'darkred',
+        '자가상표(자가)': 'darkblue',
+        '자가상표(자가상표)': 'darkgreen',
+        '자가상표(자가상표(알뜰))': 'darkpurple',
+        '자가상표(자가상표(자가))': 'cadetblue',
+        '자가상표(자가상표(자가상표))': 'black'
+    }
+    return brand_colors.get(brand, 'gray')  # 기본값은 회색
+
+# 지도 표시 함수
+def show_map(filtered_data):
+    # 서울 중심 좌표
+    m = folium.Map(
+        location=[37.5665, 126.9780], 
+        zoom_start=11
+    )
+    
+    # 각 주유소에 대해 마커 추가
+    for idx, row in filtered_data.iterrows():
+        if pd.notnull(row['latitude']) and pd.notnull(row['longitude']):
+            # HTML을 사용하여 팝업 텍스트 포맷팅
+            popup_text = f"""
+            <div style='font-family: Arial; font-size: 14px;'>
+                <b>{row['station_name']}</b><br>
+                <span style='color: #666;'>{row['brand_name']}</span><br>
+                <div style='margin-top: 5px;'>
+                    <span style='color: #e74c3c;'>휘발유: {row['gasoline_price']}원</span><br>
+                    <span style='color: #3498db;'>경유: {row['diesel_price']}원</span>
+                </div>
+            </div>
+            """
+            popup = folium.Popup(popup_text, max_width=300)
+            
+            folium.Marker(
+                [row['latitude'], row['longitude']],
+                popup=popup,
+                tooltip=row['station_name'],
+                icon=folium.Icon(color=get_brand_color(row['brand_name']))
+            ).add_to(m)
+    
+    return m
+
+# 지도 표시
+map = show_map(filtered)
+folium_static(map, width=None, height=600)
+
 # 필터된 데이터 테이블 출력
-st.subheader(f"📋 {selected_gu}의 주유소 목록")
+st.subheader(f"📋 {selected_gu} 주유소")
 st.dataframe(filtered.reset_index(drop=True), use_container_width=True, hide_index = True)
+
 # 평균 가격 시각화
 st.subheader("📊 구별 평균 가격")
 
@@ -130,12 +192,6 @@ for faq in faq_list:
 
 ##유가 가격 초기화 시간
 ##유가 세금 포함 여부
-
-
-
-
-
-
 
 # CSV 다운로드
 st.download_button(
