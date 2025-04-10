@@ -55,7 +55,7 @@ brand_options = sorted(df["brand_name"].dropna().unique())
 st.sidebar.header("🔍 필터 옵션")
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
-sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "휘발유 높은순"])
+sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "경유 낮은순"])
 price_gasoline = st.sidebar.slider ("휘발유 가격" , 0 , 3000, step=10, format="%d원", key="price_gasoline_slider", value = 3000)
 price_diesel = st.sidebar.slider ("경유 가격" , 0 , 3000, step=10, format="%d원", key="price_diesel_slider", value = 3000)
 
@@ -72,8 +72,8 @@ filtered = filtered[filtered["brand_name"].isin(selected_brand)]
 
 if sort_option == "휘발유 낮은순":
     filtered = filtered.sort_values("gasoline_price", ascending=True)
-else:
-    filtered = filtered.sort_values("gasoline_price", ascending=False)
+if sort_option == "경유 낮은순":
+    filtered = filtered.sort_values("diesel_price", ascending=True)
 filtered = filtered[filtered["gasoline_price"] <= price_gasoline]
 filtered = filtered[filtered["diesel_price"] <= price_diesel]
 
