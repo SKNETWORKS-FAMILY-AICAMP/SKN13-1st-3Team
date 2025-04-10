@@ -62,6 +62,7 @@ if sort_option == "휘발유 높은순":
 else:
     filtered = filtered.sort_values("gasoline_price", ascending=False)
 
+
 # 검색 기능 추가
 search_term = st.text_input("🔍 주유소 검색", placeholder="주유소 이름, 주소, 브랜드로 검색")
 
@@ -75,8 +76,22 @@ if search_term:
     filtered = filtered[search_filter]
 
 # 필터된 데이터 테이블 출력
+
+columns_to_show = ["station_name", "address", "brand_name", "gasoline_price", "diesel_price", "self_service", "car_wash", "convenience_store", "hours_24"]
+filtered_display = filtered[columns_to_show]
+filtered_display = filtered_display.rename(columns={
+    "station_name": "주유소 이름",
+    "address": "주소",
+    "brand_name": "브랜드",
+    "gasoline_price": "휘발유 가격",
+    "diesel_price": "경유 가격",
+    "self_service" : "셀프 여부",
+    "car_wash" : "세차장 유무",
+    "convenience_store" : "편의점 유무",
+    "hours_24" : "24시간 영업"
+})
 st.subheader(f"📋 {selected_gu}의 주유소 목록")
-st.dataframe(filtered.reset_index(drop=True), use_container_width=True, hide_index = True)
+st.dataframe(filtered_display.reset_index(drop=True), use_container_width=True, hide_index=True)
 
 # 평균 가격 시각화
 st.subheader("📊 구별 평균 가격")
