@@ -15,7 +15,7 @@ st.markdown("""
     <style>
     /* GS칼텍스 */
     span[aria-label="GS칼텍스, close by backspace"] {
-        background-color: #48B445 !important;  /* 초록색 */
+        background-color: #FFA500 !important;  /* 주황색 */
         color: white !important;
     }
     
@@ -27,8 +27,8 @@ st.markdown("""
     
     /* S-OIL */
     span[aria-label="S-OIL, close by backspace"] {
-        background-color: #FFE501 !important;  /* 노란색 */
-        color: black !important;
+        background-color: #48B445 !important;  /* 초록색 */
+        color: white !important;
     }
     
     /* SK에너지 */
@@ -39,7 +39,7 @@ st.markdown("""
     
     /* 알뜰주유소 */
     span[aria-label="알뜰주유소, close by backspace"] {
-        background-color: #FFA500 !important;  /* 주황색 */
+        background-color: #9F468F !important;  /* 보라색 */
         color: white !important;
     }
     
@@ -73,7 +73,7 @@ conn = pymysql.connect(
 
 # SQL 쿼리 실행하여 데이터 가져오기
 query = """
-    SELECT gs.*, b.brand_name 
+    SELECT gs.*, b.*
     FROM gas_station gs
     JOIN brand b ON gs.brand_id = b.brand_id
 """
@@ -97,7 +97,7 @@ gu_options = ["전체"] + sorted(df["region"].dropna().unique().tolist())
 brand_options = sorted(df["brand_name"].dropna().unique())
 
 st.sidebar.image("openoil.png", width=800)
-st.sidebar.header("🔍 필터 옵션")
+# st.sidebar.header("🔍 필터 옵션")
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
 # 사이드바 체크박스
@@ -141,7 +141,7 @@ filtered = filtered[filtered["gasoline_price"] <= price_gasoline]
 filtered = filtered[filtered["diesel_price"] <= price_diesel]
 
 # 검색 기능 추가
-st.markdown("### 🔍주유소 검색")
+st.markdown("### 주유소 검색")
 search_term = st.text_input("", placeholder="주유소 이름, 주소, 브랜드로 검색", label_visibility="collapsed")
 
 if search_term:
@@ -157,11 +157,11 @@ if search_term:
 def get_brand_color(brand):
     # 브랜드별 고정 색상 매핑
     brand_colors = {
-        'GS칼텍스': 'green',
-        'S-OIL': 'yellow',
+        'GS칼텍스': 'orange',
+        'S-OIL': 'green',
         'SK에너지': 'red',
         'HD현대오일뱅크': 'blue',
-        '알뜰주유소': 'orange',
+        '알뜰주유소': 'purple',
         '자가상표': 'gray',
         '자가상표2': 'gray',
     }
@@ -183,6 +183,7 @@ def show_map(filtered_data):
             <div style='font-family: Arial; font-size: 14px;'>
                 <b>{row['station_name']}</b><br>
                 <span style='color: #666;'>{row['brand_name']}</span><br>
+                <span style='color: #666;'>TEL. {row['cst_service']}</span>
                 <div style='margin-top: 5px;'>
                     <span style='color: #e74c3c;'>휘발유: {row['gasoline_price']}원</span><br>
                     <span style='color: #3498db;'>경유: {row['diesel_price']}원</span>
@@ -215,7 +216,7 @@ filtered_display = filtered_display.rename(columns={
     "gasoline_price": "휘발유 가격",
     "diesel_price": "경유 가격"
 })
-st.subheader(f"📋 {selected_gu}의 주유소 목록")
+# st.subheader(f"📋 {selected_gu}의 주유소 목록")
 st.dataframe(filtered_display.reset_index(drop=True), use_container_width=True, hide_index=True)
 
 # 평균 가격 시각화
