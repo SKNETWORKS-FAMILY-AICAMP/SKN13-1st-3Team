@@ -3,19 +3,66 @@ import pandas as pd
 import pymysql
 import altair as alt
 import folium
-from streamlit_folium import folium_static
-from geopy.geocoders import Nominatim
+import os
 import time
 import random
 
+from streamlit_folium import folium_static
+from geopy.geocoders import Nominatim
+
+
 st.set_page_config(page_title="서울시 주유소 대시보드", layout="wide")
-st.title("서울시 주유소 정보 대시보드")
+# CSS 스타일 적용
+st.markdown("""
+    <style>
+    /* GS칼텍스 */
+    span[aria-label="GS칼텍스, close by backspace"] {
+        background-color: #48B445 !important;  /* 초록색 */
+        color: white !important;
+    }
+    
+    /* HD현대오일뱅크 */
+    span[aria-label="HD현대오일뱅크, close by backspace"] {
+        background-color: #79B3EA !important;  /* 파란색 */
+        color: white !important;
+    }
+    
+    /* S-OIL */
+    span[aria-label="S-OIL, close by backspace"] {
+        background-color: #FFE501 !important;  /* 노란색 */
+        color: black !important;
+    }
+    
+    /* SK에너지 */
+    span[aria-label="SK에너지, close by backspace"] {
+        background-color: #FF0000 !important;  /* 빨간색 */
+        color: white !important;
+    }
+    
+    /* 알뜰주유소 */
+    span[aria-label="알뜰주유소, close by backspace"] {
+        background-color: #FFA500 !important;  /* 주황색 */
+        color: white !important;
+    }
+    
+    /* 자가상표 */
+    span[aria-label="자가상표, close by backspace"] {
+        background-color: #808080 !important;  /* 회색 */
+        color: white !important;
+    }
+    
+    /* 호버 효과 */
+    span[aria-label*="close by backspace"]:hover {
+        opacity: 0.8 !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # CSV 파일 경로 설정
-# csv_path = "../crawling/주유소정보.csv"  # 경로는 상황에 맞게 조정하세요
+csv_path = "../crawling/2025-04-10.csv"  # 경로는 상황에 맞게 조정하세요
 
 # # 데이터 불러오기
-# df = pd.read_csv(csv_path)
+df = pd.read_csv(csv_path)
 
 conn = pymysql.connect(
         host='192.168.0.45', # DB 주소 (예: '127.0.0.1' 또는 AWS RDS 주소)
@@ -55,15 +102,35 @@ st.sidebar.image("openoil.png", width=800)
 st.sidebar.header("🔍 필터 옵션")
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
-sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "휘발유 높은순"])
+
+# 사이드바 체크박스
+st.sidebar.write("부가 옵션")
+self_service = st.sidebar.checkbox("셀프 주유소")
+car_wash = st.sidebar.checkbox("세차장")
+convenience_store = st.sidebar.checkbox("편의점")
+open_24h = st.sidebar.checkbox("24시 운영")
+
+# 체크박스 필터링 된 데이터 출력
+filtered_checkbox = st.sidebar.checkbox
+filtered = df.copy()
+
+# 각 체크박스의 상태에 따라 필터링
+if self_service:
+     filtered = filtered[filtered["self_service"]=="Y"]
+if car_wash:
+     filtered = filtered[filtered["car_wash"]=="Y"]
+if convenience_store:
+     filtered = filtered[filtered["convenience_store"]=="Y"]
+if open_24h:
+     filtered = filtered[filtered["hours_24"]=="Y"]
+# 사이드바 가격정렬
+sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "경유 낮은순"])
+# 사이드바 가격슬라이더
 price_gasoline = st.sidebar.slider ("휘발유 가격" , 0 , 3000, step=10, format="%d원", key="price_gasoline_slider", value = 3000)
 price_diesel = st.sidebar.slider ("경유 가격" , 0 , 3000, step=10, format="%d원", key="price_diesel_slider", value = 3000)
 
-
-
-    
+  
 # 필터 적용
-filtered = df.copy()
 
 if selected_gu != "전체":
     filtered = filtered[filtered["region"] == selected_gu]
@@ -72,11 +139,10 @@ filtered = filtered[filtered["brand_name"].isin(selected_brand)]
 
 if sort_option == "휘발유 낮은순":
     filtered = filtered.sort_values("gasoline_price", ascending=True)
-else:
-    filtered = filtered.sort_values("gasoline_price", ascending=False)
+if sort_option == "경유 낮은순":
+    filtered = filtered.sort_values("diesel_price", ascending=True)
 filtered = filtered[filtered["gasoline_price"] <= price_gasoline]
 filtered = filtered[filtered["diesel_price"] <= price_diesel]
-
 
 # 검색 기능 추가
 st.markdown("### 🔍주유소 검색")
@@ -90,130 +156,18 @@ if search_term:
         filtered["brand_name"].str.contains(search_term, case=False, na=False)
     )
     filtered = filtered[search_filter]
-# 검색 체크박스 추가
-
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    self_service = st.checkbox("셀프 주유소")
-with col2:
-    car_wash = st.checkbox("세차장")
-with col3:
-    convenience_store = st.checkbox("편의점")
-with col4:
-    open_24h = st.checkbox("24시 운영")
-# 체크박스 필터링 된 데이터 출력
-filtered_checkbox = st.checkbox
-
-# 각 체크박스의 상태에 따라 필터링
-if self_service:
-    filtered = filtered[filtered["self_service"]=="Y"]
-if car_wash:
-    filtered = filtered[filtered["car_wash"]=="Y"]
-if convenience_store:
-    filtered = filtered[filtered["convenience_store"]=="Y"]
-if open_24h:
-    filtered = filtered[filtered["hours_24"]=="Y"]
 
 # 브랜드별 색상 매핑 함수
 def get_brand_color(brand):
     # 브랜드별 고정 색상 매핑
     brand_colors = {
-        'GS칼텍스': 'red',
-        'S-OIL': 'blue',
-        'SK에너지': 'green',
-        '현대오일뱅크': 'purple',
+        'GS칼텍스': 'green',
+        'S-OIL': 'yellow',
+        'SK에너지': 'red',
+        'HD현대오일뱅크': 'blue',
         '알뜰주유소': 'orange',
-        '자가상표': 'gray',
-        '농협': 'pink',
-        '자가상표(알뜰)': 'darkred',
-        '자가상표(자가)': 'darkblue',
-        '자가상표(자가상표)': 'darkgreen',
-        '자가상표(자가상표(알뜰))': 'darkpurple',
-        '자가상표(자가상표(자가))': 'cadetblue',
-        '자가상표(자가상표(자가상표))': 'black'
-    }
-    return brand_colors.get(brand, 'gray')  # 기본값은 회색
-
-# 지도 표시 함수
-def show_map(filtered_data):
-    # 서울 중심 좌표
-    m = folium.Map(
-        location=[37.5665, 126.9780], 
-        zoom_start=11
-    )
-    
-    # 각 주유소에 대해 마커 추가
-    for idx, row in filtered_data.iterrows():
-        if pd.notnull(row['latitude']) and pd.notnull(row['longitude']):
-            # HTML을 사용하여 팝업 텍스트 포맷팅
-            popup_text = f"""
-            <div style='font-family: Arial; font-size: 14px;'>
-                <b>{row['station_name']}</b><br>
-                <span style='color: #666;'>{row['brand_name']}</span><br>
-                <div style='margin-top: 5px;'>
-                    <span style='color: #e74c3c;'>휘발유: {row['gasoline_price']}원</span><br>
-                    <span style='color: #3498db;'>경유: {row['diesel_price']}원</span>
-                </div>
-            </div>
-            """
-            popup = folium.Popup(popup_text, max_width=300)
-            
-            folium.Marker(
-                [row['latitude'], row['longitude']],
-                popup=popup,
-                tooltip=row['station_name'],
-                icon=folium.Icon(color=get_brand_color(row['brand_name']))
-            ).add_to(m)
-    
-    return m
-
-# 지도 표시
-map = show_map(filtered)
-folium_static(map, width=None, height=600)
-
-# 검색 체크박스 추가
-
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    self_service = st.checkbox("셀프 주유소")
-with col2:
-    car_wash = st.checkbox("세차장")
-with col3:
-    convenience_store = st.checkbox("편의점")
-with col4:
-    open_24h = st.checkbox("24시 운영")
-# 체크박스 필터링 된 데이터 출력
-filtered_checkbox = st.checkbox
-
-# 각 체크박스의 상태에 따라 필터링
-if self_service:
-    filtered = filtered[filtered["self_service"]=="Y"]
-if car_wash:
-    filtered = filtered[filtered["car_wash"]=="Y"]
-if convenience_store:
-    filtered = filtered[filtered["convenience_store"]=="Y"]
-if open_24h:
-    filtered = filtered[filtered["hours_24"]=="Y"]
-
-# 브랜드별 색상 매핑 함수
-def get_brand_color(brand):
-    # 브랜드별 고정 색상 매핑
-    brand_colors = {
-        'GS칼텍스': 'red',
-        'S-OIL': 'blue',
-        'SK에너지': 'green',
-        '현대오일뱅크': 'purple',
-        '알뜰주유소': 'orange',
-        '자가상표': 'gray',
-        '농협': 'pink',
-        '자가상표(알뜰)': 'darkred',
-        '자가상표(자가)': 'darkblue',
-        '자가상표(자가상표)': 'darkgreen',
-        '자가상표(자가상표(알뜰))': 'darkpurple',
-        '자가상표(자가상표(자가))': 'cadetblue',
-        '자가상표(자가상표(자가상표))': 'black'
+        '코끼리주유소': 'gray',
+        '정호주유소': 'gray',
     }
     return brand_colors.get(brand, 'gray')  # 기본값은 회색
 
@@ -299,6 +253,45 @@ chart = alt.Chart(mean_prices_melted).mark_bar(size=10).encode(
     width=600,  # 전체 그래프 너비
     height=400,
     title='지역별 평균 유가'
+)
+
+st.altair_chart(chart, use_container_width=True)
+
+# CSV 파일들이 저장된 폴더 경로
+folder_path = r"C:\Users\Playdata\Documents\SKN13-1st-3Team\crawling"
+column_name = '휘발유'  # 평균을 구할 column 이름
+
+# 결과 저장
+file_avg_list = []
+data = []
+# 폴더 안 모든 CSV 파일 반복
+for filename in sorted(os.listdir(folder_path)):
+    if filename.endswith('.csv'):
+        file_path = os.path.join(folder_path, filename)
+        df = pd.read_csv(file_path)
+
+        # 쉼표 제거 + 숫자로 안전하게 변환
+        if column_name in df.columns:
+            df[column_name] = pd.to_numeric(df[column_name].astype(str).str.replace(',', ''), errors='coerce')
+            avg = df[column_name].mean()
+            date = filename.replace('.csv', '')
+            data.append({'date': date, 'average': avg})
+        else:
+            print(f"'{column_name}' column not found in {filename}")
+
+# 날짜별 평균 데이터프레임 생성
+avg_df = pd.DataFrame(data)
+avg_df['date'] = pd.to_datetime(avg_df['date'])  # 날짜 타입으로 변환
+avg_df = avg_df.sort_values('date')
+
+# 그래프 그리기
+
+chart = alt.Chart(avg_df).mark_line(point=True).encode(
+    x='date:T',
+    y=alt.Y('average:Q', scale=alt.Scale(domain=[1700, 1780])),
+    tooltip=['date:T', 'average:Q']
+).properties(
+    title='날짜별 평균 가격 변화'
 )
 
 st.altair_chart(chart, use_container_width=True)
