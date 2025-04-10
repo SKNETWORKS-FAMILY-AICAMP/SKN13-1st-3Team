@@ -9,7 +9,6 @@ import time
 import random
 
 st.set_page_config(page_title="서울시 주유소 대시보드", layout="wide")
-st.title("서울시 주유소 정보 대시보드")
 
 # CSS 스타일 적용
 st.markdown("""
