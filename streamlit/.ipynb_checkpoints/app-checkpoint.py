@@ -260,7 +260,7 @@ chart = alt.Chart(mean_prices_melted).mark_bar(size=10).encode(
 st.altair_chart(chart, use_container_width=True)
 
 # CSV 파일들이 저장된 폴더 경로
-folder_path = r"C:\Users\Playdata\Documents\SKN13-1st-3Team\crawling"
+folder_path = r"C:\Documents\1st project\SKN13-1st-3Team\crawling"
 column_name = '휘발유'  # 평균을 구할 column 이름
 
 # 결과 저장
