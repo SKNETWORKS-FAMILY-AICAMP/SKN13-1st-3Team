@@ -11,6 +11,52 @@ import random
 st.set_page_config(page_title="서울시 주유소 대시보드", layout="wide")
 st.title("서울시 주유소 정보 대시보드")
 
+# CSS 스타일 적용
+st.markdown("""
+    <style>
+    /* GS칼텍스 */
+    span[aria-label="GS칼텍스, close by backspace"] {
+        background-color: #48B445 !important;  /* 초록색 */
+        color: white !important;
+    }
+    
+    /* HD현대오일뱅크 */
+    span[aria-label="HD현대오일뱅크, close by backspace"] {
+        background-color: #79B3EA !important;  /* 파란색 */
+        color: white !important;
+    }
+    
+    /* S-OIL */
+    span[aria-label="S-OIL, close by backspace"] {
+        background-color: #FFE501 !important;  /* 노란색 */
+        color: black !important;
+    }
+    
+    /* SK에너지 */
+    span[aria-label="SK에너지, close by backspace"] {
+        background-color: #FF0000 !important;  /* 빨간색 */
+        color: white !important;
+    }
+    
+    /* 알뜰주유소 */
+    span[aria-label="알뜰주유소, close by backspace"] {
+        background-color: #FFA500 !important;  /* 주황색 */
+        color: white !important;
+    }
+    
+    /* 자가상표 */
+    span[aria-label="자가상표, close by backspace"] {
+        background-color: #808080 !important;  /* 회색 */
+        color: white !important;
+    }
+    
+    /* 호버 효과 */
+    span[aria-label*="close by backspace"]:hover {
+        opacity: 0.8 !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # CSV 파일 경로 설정
 # csv_path = "../crawling/주유소정보.csv"  # 경로는 상황에 맞게 조정하세요
 
@@ -58,8 +104,6 @@ selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, defau
 sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "경유 낮은순"])
 price_gasoline = st.sidebar.slider ("휘발유 가격" , 0 , 3000, step=10, format="%d원", key="price_gasoline_slider", value = 3000)
 price_diesel = st.sidebar.slider ("경유 가격" , 0 , 3000, step=10, format="%d원", key="price_diesel_slider", value = 3000)
-
-
 
     
 # 필터 적용
@@ -119,19 +163,13 @@ if open_24h:
 def get_brand_color(brand):
     # 브랜드별 고정 색상 매핑
     brand_colors = {
-        'GS칼텍스': 'red',
-        'S-OIL': 'blue',
-        'SK에너지': 'green',
-        '현대오일뱅크': 'purple',
+        'GS칼텍스': 'green',
+        'S-OIL': 'yellow',
+        'SK에너지': 'red',
+        'HD현대오일뱅크': 'blue',
         '알뜰주유소': 'orange',
         '자가상표': 'gray',
-        '농협': 'pink',
-        '자가상표(알뜰)': 'darkred',
-        '자가상표(자가)': 'darkblue',
-        '자가상표(자가상표)': 'darkgreen',
-        '자가상표(자가상표(알뜰))': 'darkpurple',
-        '자가상표(자가상표(자가))': 'cadetblue',
-        '자가상표(자가상표(자가상표))': 'black'
+        '자가상표2': 'gray',
     }
     return brand_colors.get(brand, 'gray')  # 기본값은 회색
 
