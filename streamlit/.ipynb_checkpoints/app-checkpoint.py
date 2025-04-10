@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pymysql
+import altair as alt
 import folium
 from streamlit_folium import folium_static
 from geopy.geocoders import Nominatim
@@ -24,8 +25,6 @@ conn = pymysql.connect(
         db='gas_station',
         charset='utf8'  # 저장할 데이터베이스명
     )
-
-import pandas as pd
 
 # SQL 쿼리 실행하여 데이터 가져오기
 query = """
@@ -52,6 +51,7 @@ df["diesel_price"] = pd.to_numeric(df["diesel_price"].astype(str).str.replace(",
 gu_options = ["전체"] + sorted(df["region"].dropna().unique().tolist())
 brand_options = sorted(df["brand_name"].dropna().unique())
 
+st.sidebar.image("openoil.png", width=800)
 st.sidebar.header("🔍 필터 옵션")
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
@@ -172,6 +172,88 @@ def show_map(filtered_data):
 map = show_map(filtered)
 folium_static(map, width=None, height=600)
 
+# 검색 체크박스 추가
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    self_service = st.checkbox("셀프 주유소")
+with col2:
+    car_wash = st.checkbox("세차장")
+with col3:
+    convenience_store = st.checkbox("편의점")
+with col4:
+    open_24h = st.checkbox("24시 운영")
+# 체크박스 필터링 된 데이터 출력
+filtered_checkbox = st.checkbox
+
+# 각 체크박스의 상태에 따라 필터링
+if self_service:
+    filtered = filtered[filtered["self_service"]=="Y"]
+if car_wash:
+    filtered = filtered[filtered["car_wash"]=="Y"]
+if convenience_store:
+    filtered = filtered[filtered["convenience_store"]=="Y"]
+if open_24h:
+    filtered = filtered[filtered["hours_24"]=="Y"]
+
+# 브랜드별 색상 매핑 함수
+def get_brand_color(brand):
+    # 브랜드별 고정 색상 매핑
+    brand_colors = {
+        'GS칼텍스': 'red',
+        'S-OIL': 'blue',
+        'SK에너지': 'green',
+        '현대오일뱅크': 'purple',
+        '알뜰주유소': 'orange',
+        '자가상표': 'gray',
+        '농협': 'pink',
+        '자가상표(알뜰)': 'darkred',
+        '자가상표(자가)': 'darkblue',
+        '자가상표(자가상표)': 'darkgreen',
+        '자가상표(자가상표(알뜰))': 'darkpurple',
+        '자가상표(자가상표(자가))': 'cadetblue',
+        '자가상표(자가상표(자가상표))': 'black'
+    }
+    return brand_colors.get(brand, 'gray')  # 기본값은 회색
+
+# 지도 표시 함수
+def show_map(filtered_data):
+    # 서울 중심 좌표
+    m = folium.Map(
+        location=[37.5665, 126.9780], 
+        zoom_start=11
+    )
+    
+    # 각 주유소에 대해 마커 추가
+    for idx, row in filtered_data.iterrows():
+        if pd.notnull(row['latitude']) and pd.notnull(row['longitude']):
+            # HTML을 사용하여 팝업 텍스트 포맷팅
+            popup_text = f"""
+            <div style='font-family: Arial; font-size: 14px;'>
+                <b>{row['station_name']}</b><br>
+                <span style='color: #666;'>{row['brand_name']}</span><br>
+                <div style='margin-top: 5px;'>
+                    <span style='color: #e74c3c;'>휘발유: {row['gasoline_price']}원</span><br>
+                    <span style='color: #3498db;'>경유: {row['diesel_price']}원</span>
+                </div>
+            </div>
+            """
+            popup = folium.Popup(popup_text, max_width=300)
+            
+            folium.Marker(
+                [row['latitude'], row['longitude']],
+                popup=popup,
+                tooltip=row['station_name'],
+                icon=folium.Icon(color=get_brand_color(row['brand_name']))
+            ).add_to(m)
+    
+    return m
+
+# 지도 표시
+map = show_map(filtered)
+folium_static(map, width=None, height=600)
+
 # 필터된 데이터 테이블 출력
 
 columns_to_show = ["station_name", "address", "brand_name", "gasoline_price", "diesel_price"]
@@ -185,10 +267,9 @@ filtered_display = filtered_display.rename(columns={
 })
 st.subheader(f"📋 {selected_gu}의 주유소 목록")
 st.dataframe(filtered_display.reset_index(drop=True), use_container_width=True, hide_index=True)
+
 # 평균 가격 시각화
 st.subheader("📊 구별 평균 가격")
-
-import altair as alt
 
 # 평균 가격 계산
 mean_prices = df.groupby("region")[["gasoline_price", "diesel_price"]].mean().round(1).reset_index()
@@ -223,7 +304,6 @@ chart = alt.Chart(mean_prices_melted).mark_bar(size=10).encode(
 st.altair_chart(chart, use_container_width=True)
 
 #faq
-    
 st.subheader("FAQ - 자주 묻는 질문")
 
 faq_list = [
@@ -294,7 +374,6 @@ faq_list = [
 for faq in faq_list:
     with st.expander(faq["Q"]):
         st.markdown(faq["A"], unsafe_allow_html=True)  # 줄바꿈 및 마크다운 적용
-
 
 
 # CSV 다운로드
