@@ -99,17 +99,50 @@ st.dataframe(filtered_display.reset_index(drop=True), use_container_width=True, 
 st.subheader("📊 구별 평균 가격")
 
 # 휘발유와 경유를 별도의 차트로 표시
-col1, col2 = st.columns(2)
+# col1, col2 = st.columns(2)
 
-with col1:
-    st.subheader("휘발유 평균 가격")
-    mean_gasoline = df.groupby("region")["gasoline_price"].mean().round(1)
-    st.bar_chart(mean_gasoline)
+# with col1:
+#     st.subheader("휘발유 평균 가격")
+#     mean_gasoline = df.groupby("region")["gasoline_price"].mean().round(1)
+#     st.bar_chart(mean_gasoline)
 
-with col2:
-    st.subheader("경유 평균 가격")
-    mean_diesel = df.groupby("region")["diesel_price"].mean().round(1)
-    st.bar_chart(mean_diesel)
+# with col2:
+#     st.subheader("경유 평균 가격")
+#     mean_diesel = df.groupby("region")["diesel_price"].mean().round(1)
+#     st.bar_chart(mean_diesel)
+import altair as alt
+
+# 평균 가격 계산
+mean_prices = df.groupby("region")[["gasoline_price", "diesel_price"]].mean().round(1).reset_index()
+
+# 긴 형식으로 변환
+mean_prices_melted = mean_prices.melt(id_vars="region", 
+                                      value_vars=["gasoline_price", "diesel_price"],
+                                      var_name="유종", value_name="가격")
+
+# 보기 좋게 이름 바꾸기
+mean_prices_melted["유종"] = mean_prices_melted["유종"].replace({
+    "gasoline_price": "휘발유",
+    "diesel_price": "경유"
+})
+
+# 색상 지정
+color_scale = alt.Scale(domain=["휘발유", "경유"], range=["#FFD1DC", "#AEC6CF"])
+
+# Altair grouped bar chart
+chart = alt.Chart(mean_prices_melted).mark_bar(size=10).encode(
+    x=alt.X('region:N', title='지역', axis=alt.Axis(labelAngle=-90)),
+    y=alt.Y('가격:Q'),
+    color=alt.Color('유종:N', scale=color_scale, sort=["휘발유", "경유"]),
+    xOffset=alt.X('유종:N', sort=["휘발유", "경유"]), # 👉 유종에 따라 막대를 x축에서 offset
+    tooltip=['region', '유종', '가격']
+).properties(
+    width=600,  # 전체 그래프 너비
+    height=400,
+    title='지역별 평균 유가'
+)
+
+st.altair_chart(chart, use_container_width=True)
 
 #faq
 st.subheader("FAQ-자주 묻는 질문")
