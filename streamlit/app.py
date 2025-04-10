@@ -47,7 +47,7 @@ brand_options = sorted(df["brand_name"].dropna().unique())
 st.sidebar.header("🔍 필터 옵션")
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
-sort_option = st.sidebar.radio("가격 정렬", ["휘발유 높은순", "휘발유 낮은순"])
+sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "휘발유 높은순"])
 price_gasoline = st.sidebar.slider ("휘발유 가격" , 0 , 3000, step=10, format="%d원", key="price_gasoline_slider", value = 3000)
 price_diesel = st.sidebar.slider ("경유 가격" , 0 , 3000, step=10, format="%d원", key="price_diesel_slider", value = 3000)
 # 필터 적용
@@ -58,7 +58,7 @@ if selected_gu != "전체":
 
 filtered = filtered[filtered["brand_name"].isin(selected_brand)]
 
-if sort_option == "휘발유 높은순":
+if sort_option == "휘발유 낮은순":
     filtered = filtered.sort_values("gasoline_price", ascending=True)
 else:
     filtered = filtered.sort_values("gasoline_price", ascending=False)
@@ -98,18 +98,6 @@ st.dataframe(filtered_display.reset_index(drop=True), use_container_width=True, 
 # 평균 가격 시각화
 st.subheader("📊 구별 평균 가격")
 
-# 휘발유와 경유를 별도의 차트로 표시
-# col1, col2 = st.columns(2)
-
-# with col1:
-#     st.subheader("휘발유 평균 가격")
-#     mean_gasoline = df.groupby("region")["gasoline_price"].mean().round(1)
-#     st.bar_chart(mean_gasoline)
-
-# with col2:
-#     st.subheader("경유 평균 가격")
-#     mean_diesel = df.groupby("region")["diesel_price"].mean().round(1)
-#     st.bar_chart(mean_diesel)
 import altair as alt
 
 # 평균 가격 계산
