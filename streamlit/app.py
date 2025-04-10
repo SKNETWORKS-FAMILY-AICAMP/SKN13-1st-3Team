@@ -101,13 +101,33 @@ st.sidebar.image("openoil.png", width=800)
 st.sidebar.header("🔍 필터 옵션")
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
+# 사이드바 체크박스
+st.sidebar.write("부가 옵션")
+self_service = st.sidebar.checkbox("셀프 주유소")
+car_wash = st.sidebar.checkbox("세차장")
+convenience_store = st.sidebar.checkbox("편의점")
+open_24h = st.sidebar.checkbox("24시 운영")
+
+# 체크박스 필터링 된 데이터 출력
+filtered_checkbox = st.sidebar.checkbox
+filtered = df.copy()
+# 각 체크박스의 상태에 따라 필터링
+if self_service:
+     filtered = filtered[filtered["self_service"]=="Y"]
+if car_wash:
+     filtered = filtered[filtered["car_wash"]=="Y"]
+if convenience_store:
+     filtered = filtered[filtered["convenience_store"]=="Y"]
+if open_24h:
+     filtered = filtered[filtered["hours_24"]=="Y"]
+# 사이드바 가격정렬
 sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "경유 낮은순"])
+# 사이드바 가격슬라이더
 price_gasoline = st.sidebar.slider ("휘발유 가격" , 0 , 3000, step=10, format="%d원", key="price_gasoline_slider", value = 3000)
 price_diesel = st.sidebar.slider ("경유 가격" , 0 , 3000, step=10, format="%d원", key="price_diesel_slider", value = 3000)
 
-    
+  
 # 필터 적용
-filtered = df.copy()
 
 if selected_gu != "전체":
     filtered = filtered[filtered["region"] == selected_gu]
@@ -121,7 +141,6 @@ if sort_option == "경유 낮은순":
 filtered = filtered[filtered["gasoline_price"] <= price_gasoline]
 filtered = filtered[filtered["diesel_price"] <= price_diesel]
 
-
 # 검색 기능 추가
 st.markdown("### 🔍주유소 검색")
 search_term = st.text_input("", placeholder="주유소 이름, 주소, 브랜드로 검색", label_visibility="collapsed")
@@ -134,30 +153,6 @@ if search_term:
         filtered["brand_name"].str.contains(search_term, case=False, na=False)
     )
     filtered = filtered[search_filter]
-# 검색 체크박스 추가
-
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    self_service = st.checkbox("셀프 주유소")
-with col2:
-    car_wash = st.checkbox("세차장")
-with col3:
-    convenience_store = st.checkbox("편의점")
-with col4:
-    open_24h = st.checkbox("24시 운영")
-# 체크박스 필터링 된 데이터 출력
-filtered_checkbox = st.checkbox
-
-# 각 체크박스의 상태에 따라 필터링
-if self_service:
-    filtered = filtered[filtered["self_service"]=="Y"]
-if car_wash:
-    filtered = filtered[filtered["car_wash"]=="Y"]
-if convenience_store:
-    filtered = filtered[filtered["convenience_store"]=="Y"]
-if open_24h:
-    filtered = filtered[filtered["hours_24"]=="Y"]
 
 # 브랜드별 색상 매핑 함수
 def get_brand_color(brand):
