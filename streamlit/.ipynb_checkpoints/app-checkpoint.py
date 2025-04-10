@@ -48,7 +48,8 @@ st.sidebar.header("🔍 필터 옵션")
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
 sort_option = st.sidebar.radio("가격 정렬", ["휘발유 높은순", "휘발유 낮은순"])
-price = st.sidebar.slider ('가격' , 0 , 3000, step=10, format="%d원")
+price_gasoline = st.sidebar.slider ("휘발유 가격" , 0 , 3000, step=10, format="%d원", key="price_gasoline_slider", value = 3000)
+price_diesel = st.sidebar.slider ("경유 가격" , 0 , 3000, step=10, format="%d원", key="price_diesel_slider", value = 3000)
 # 필터 적용
 filtered = df.copy()
 
@@ -61,6 +62,8 @@ if sort_option == "휘발유 높은순":
     filtered = filtered.sort_values("gasoline_price", ascending=True)
 else:
     filtered = filtered.sort_values("gasoline_price", ascending=False)
+filtered = filtered[filtered['gasoline_price'] <= price_gasoline]
+filtered = filtered[filtered['diesel_price'] <= price_diesel]
 
 
 # 검색 기능 추가
@@ -92,7 +95,6 @@ filtered_display = filtered_display.rename(columns={
 })
 st.subheader(f"📋 {selected_gu}의 주유소 목록")
 st.dataframe(filtered_display.reset_index(drop=True), use_container_width=True, hide_index=True)
-
 # 평균 가격 시각화
 st.subheader("📊 구별 평균 가격")
 
