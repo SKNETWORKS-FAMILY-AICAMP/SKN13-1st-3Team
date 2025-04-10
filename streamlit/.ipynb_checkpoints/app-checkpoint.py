@@ -9,9 +9,32 @@ import random
 
 from streamlit_folium import folium_static
 from geopy.geocoders import Nominatim
-
+from streamlit_navigation_bar import st_navbar
 
 st.set_page_config(page_title="서울시 주유소 대시보드", layout="wide")
+
+# Create 3 columns: left, center, right
+col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([3, 5, 3, 5, 3, 5, 3, 5, 3])  # Adjust ratio if needed
+
+with col6:
+    st.page_link("pages/_faq.py", label="FAQ")
+
+with col8: 
+    st.page_link("pages/_download.py", label = "Downloads")
+
+with col4:
+    st.page_link("pages/_bb.py", label="Oil Price")
+
+with col2:
+    st.page_link("pages/_aa.py", label="Home")
+
+
+# # Define the pages for the navigation bar
+# pages = ["Home", "Documentation", "Examples", "Community", "About"]
+# # Create the navigation bar
+# page = st_navbar(pages)
+# # Display the selected page
+# st.write(page)
 
 # CSS 스타일 적용
 st.markdown("""
@@ -104,26 +127,32 @@ st.sidebar.image("openoil.png", width=800)
 selected_gu = st.sidebar.selectbox("지역 선택", gu_options)
 selected_brand = st.sidebar.multiselect("브랜드 필터", brand_options, default=brand_options)
 
-# 사이드바 체크박스
-st.sidebar.write("부가 옵션")
-self_service = st.sidebar.checkbox("셀프 주유소")
-car_wash = st.sidebar.checkbox("세차장")
-convenience_store = st.sidebar.checkbox("편의점")
-open_24h = st.sidebar.checkbox("24시 운영")
+# st.write(page)
+st.write("부가 옵션")
+col1, col2, col3, col4 = st.columns(4)
 
-# 체크박스 필터링 된 데이터 출력
-filtered_checkbox = st.sidebar.checkbox
-filtered = df.copy()
+with col1:
+    self_service = st.checkbox("셀프 주유소")
+with col2:
+    car_wash = st.checkbox("세차장")
+with col3:
+    convenience_store = st.checkbox("편의점")
+with col4:
+    open_24h = st.checkbox("24시 운영")
 
-# 각 체크박스의 상태에 따라 필터링
+#체크박스 필터링 된 데이터 출력
+filtered_checkbox = st.checkbox
+
+#각 체크박스의 상태에 따라 필터링
 if self_service:
-     filtered = filtered[filtered["self_service"]=="Y"]
+    filtered = filtered[filtered["self_service"]=="Y"]
 if car_wash:
-     filtered = filtered[filtered["car_wash"]=="Y"]
+    filtered = filtered[filtered["car_wash"]=="Y"]
 if convenience_store:
-     filtered = filtered[filtered["convenience_store"]=="Y"]
+    filtered = filtered[filtered["convenience_store"]=="Y"]
 if open_24h:
-     filtered = filtered[filtered["hours_24"]=="Y"]
+    filtered = filtered[filtered["hours_24"]=="Y"]
+    
 # 사이드바 가격정렬
 sort_option = st.sidebar.radio("가격 정렬", ["휘발유 낮은순", "경유 낮은순"])
 # 사이드바 가격슬라이더
@@ -134,7 +163,9 @@ price_diesel = st.sidebar.slider ("경유 가격" , 0 , 3000, step=10, format="%
 # 필터 적용
 
 if selected_gu != "전체":
-    filtered = filtered[filtered["region"] == selected_gu]
+    filtered = df[df["region"] == selected_gu]
+else:
+    filtered = df.copy()
 
 filtered = filtered[filtered["brand_name"].isin(selected_brand)]
 
