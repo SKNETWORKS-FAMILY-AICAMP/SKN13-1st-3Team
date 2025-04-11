@@ -52,7 +52,8 @@ https://news.mt.co.kr/mtview.php?no=2024102414265992659
 | 화면구현 | <img src="https://img.shields.io/badge/streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"> <img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-663399?style=for-the-badge&logo=css&logoColor=white"> |
 
 ### 프로젝트 구조
-📁 SKN13-1st-3Team/
+```
+SKN13-1st-3Team/
 ├── README.md
 ├── streamlit/
 │   ├── .streamlit/
@@ -68,8 +69,9 @@ https://news.mt.co.kr/mtview.php?no=2024102414265992659
 │   └── openoil.png
 ├── crawling/
 │   ├── crawling.py
-│   └── [날짜].csv (날짜 별 데이터 파일)
+│   └── [날짜].csv
 └── Insert.ipynb
+```
 
 ### 기능적 요구사항
 |ID|요구사항 설명|
