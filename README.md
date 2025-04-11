@@ -107,7 +107,7 @@
 
 |종류|TOOL명
 |-----|---|
-|언어| python , sql
+|언어| python , sql,<img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">|
 |웹크롤링|selenium
 |데이터저장| Mysql
 |데이터 시각화 : pandas
@@ -116,7 +116,7 @@
 
 <br/><br/>
 <p align="center">
-  <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">
+  
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 </p>
 <p align="center">
