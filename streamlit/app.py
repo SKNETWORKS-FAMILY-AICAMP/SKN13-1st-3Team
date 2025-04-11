@@ -41,7 +41,7 @@ st.markdown("""
     <style>
     /* GS칼텍스 */
     span[aria-label="GS칼텍스, close by backspace"] {
-        background-color: #48B445 !important;  /* 초록색 */
+        background-color: #FFA500 !important;  /* 초록색 */
         color: white !important;
     }
     
@@ -53,8 +53,8 @@ st.markdown("""
     
     /* S-OIL */
     span[aria-label="S-OIL, close by backspace"] {
-        background-color: #FFE501 !important;  /* 노란색 */
-        color: black !important;
+        background-color: #48B445 !important;  /* 초록색 */
+        color: white !important;
     }
     
     /* SK에너지 */
@@ -69,8 +69,8 @@ st.markdown("""
         color: white !important;
     }
     
-    /* 자가상표 */
-    span[aria-label="자가상표, close by backspace"] {
+    /* 정호주유소 */
+    span[aria-label="정호주유소, close by backspace"] {
         background-color: #808080 !important;  /* 회색 */
         color: white !important;
     }
@@ -208,11 +208,11 @@ if search_term:
 def get_brand_color(brand):
     # 브랜드별 고정 색상 매핑
     brand_colors = {
-        'GS칼텍스': 'green',
-        'S-OIL': 'yellow',
+        'GS칼텍스': 'orange',
+        'S-OIL': 'green',
         'SK에너지': 'red',
         'HD현대오일뱅크': 'blue',
-        '알뜰주유소': 'orange',
+        '알뜰주유소': 'purple',
         '코끼리주유소': 'gray',
         '정호주유소': 'gray',
     }

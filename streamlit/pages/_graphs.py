@@ -52,7 +52,7 @@ st.altair_chart(chart, use_container_width=True)
 
 
 # CSV 파일들이 저장된 폴더 경로
-folder_path = r"C:\Users\Playdata\Documents\SKN13-1st-3Team\crawling"
+folder_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "crawling")
 column_name = '휘발유'  # 평균을 구할 column 이름
 
 # 결과 저장
