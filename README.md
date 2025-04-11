@@ -1,5 +1,6 @@
 # SKN13-1st-3Team
 ![Image](https://github.com/user-attachments/assets/75f6e738-dabe-4c60-98e1-52441828a64f)
+![Image](https://github.com/user-attachments/assets/65a116cf-5ec6-4680-8a08-4c39fd7c400d)
 
 ## 1. 📌 프로젝트 개요
 프로젝트명: 서울시 주유소 현황 및 관련 정보 제공 시스템
