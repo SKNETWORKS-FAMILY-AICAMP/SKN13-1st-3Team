@@ -18,16 +18,16 @@
 - 팀원 별 회고
 
 ## 1. 프로젝트 개요
-### 프로젝트 소개
+### 1.1 프로젝트 소개
 - 서울시 주유소의 실시간 유가 정보와 다양한 부가 정보를 제공하는 시스템을 개발
 - 사용자들은 이 서비스를 통해 최적의 주유소를 찾고, 유가 동향을 파악할 수 있음
 
-### 동기
+### 1.2 동기
 - 변동성이 많은 유가로 유가 상승시에 '소비자' 부담이 커짐
 - 기름값은 지역별, 주유소별로 차이가 있기 때문에 어디서 주유하느냐에 따라서 비용을 절약할 수도 낭비할 수도 있음
 - 이에 각 지역별, 주유소별 가격 비교 및 위치 정보 제공 고객센터 대표번호 및 부가 시설에 따른 정보를 한번에 확인 가능하다면 현명한 소비가 가능할 것이라고 생각하여 제작
 
-### 관련 뉴스 기사
+### 1.3 관련 뉴스 기사
 <div style="display: flex; justify-content: space-between;">
     <img src="./image/뉴스기사.png" width="48%" />
     <img src="./image/자료.png" width="48%" />
@@ -35,14 +35,14 @@
 
 https://news.mt.co.kr/mtview.php?no=2024102414265992659
 
-### 프로젝트 목표
+### 1.4 프로젝트 목표
 - 석유공사가 운영하는 유가정보 서비스를 바탕으로 서울시 내의 400여개 주유소의 실시간 판매가격 및 부가시설 정보를 제공
 - 위치정보 기반으로 상세위치 정보 제공 및 고객센터 정보 제공
 - 날짜별 유가 추이 통계 제공
 - 주유소 및 제공서비스 관련 FAQ 조회 시스템 제공
 
 ## 2. 프로젝트 구성
-### 기술 스택
+### 2.1 기술 스택
 | 분류 | 기술 |
 |------|------|
 | 언어 | <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> |
@@ -51,7 +51,7 @@ https://news.mt.co.kr/mtview.php?no=2024102414265992659
 | 데이터 시각화 | <img src="https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white"> |
 | 화면구현 | <img src="https://img.shields.io/badge/streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"> <img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-663399?style=for-the-badge&logo=css&logoColor=white"> |
 
-### 프로젝트 구조
+### 2.2 프로젝트 구조
 ```
 SKN13-1st-3Team/
 ├── README.md
@@ -73,7 +73,7 @@ SKN13-1st-3Team/
 └── Insert.ipynb
 ```
 
-### 기능적 요구사항
+### 2.3 기능적 요구사항
 |ID|요구사항 설명|
 |------|---|
 |FR-01|사용자에게 주유소 정보를 시각화하여 지도에 표시해야 함|
@@ -86,7 +86,7 @@ SKN13-1st-3Team/
 |FR-08|페이지 간 이동은 네비게이션 바 및 '홈으로 가기' 버튼으로 구현되어야 함|
 |FR-09|지도 위 주유소 마커는 브랜드별로 구분된 색상으로 표시되어야 함|
 
-### 비기능적 요구사항
+### 2.4 비기능적 요구사항
 |ID|요구사항 설명|
 |------|---|
 |NFR-01|대시보드는 초기 로딩 시 5초 이내에 화면을 출력해야 함|
@@ -95,7 +95,7 @@ SKN13-1st-3Team/
 |NFR-04|대시보드는 PC 환경에 최적화되어야 함|
 
 ## 3. 주요 기능 설명
-### 1. 데이터 수집 및 관리
+### 3.1 데이터 수집 및 관리
 - 오피넷(https://www.opinet.co.kr)에서 서울시 25개 구별 데이터 수집
 - Selenium을 이용한 자동화된 데이터 수집
 - 일별 CSV 파일 저장 및 MySQL DB 연동
@@ -103,17 +103,17 @@ SKN13-1st-3Team/
 - 가격 정보(휘발유, 경유) 수집
 - 부가 정보(셀프, 세차, 편의점, 24시간 영업 유무) 수집
 
-### 2. 주유소 검색 및 지도 표시
+### 3.2 주유소 검색 및 지도 표시
 - 서울시 25개 구별 주유소 검색
 - 지도에 주유소 위치 표시 (브랜드별 색상 구분)
 - 휘발유/경유 가격 오름차순 정렬
 - 브랜드별 필터링 (GS칼텍스, SK에너지, S-OIL 등)
 
-### 3. 데이터 시각화
+### 3.3 데이터 시각화
 - 구별 평균 유가 막대 그래프
 - 날짜별 유가 변동 추이 라인 그래프
 
-### 4. 부가 기능
+### 3.4 부가 기능
 - 셀프/세차장/편의점/24시간 운영 필터링
 - 주유소 이름/주소/브랜드 검색
 - CSV 형식 데이터 다운로드
@@ -122,7 +122,7 @@ SKN13-1st-3Team/
 > 모든 기능은 Streamlit으로 구현되었으며, MySQL 데이터베이스와 연동되어 데이터를 제공함
 
 ## 4. 서비스 화면 구성
-### 메인 페이지
+### 4.1 메인 페이지
 <div style="display: flex; justify-content: center;">
     <img src="./image/메인.png" width="80%" />
 </div>
@@ -146,7 +146,7 @@ SKN13-1st-3Team/
   - 주유소 이름/주소/브랜드 통합 검색
   - 실시간 검색 결과 반영
 
-### 유가 정보 페이지
+### 4.2 유가 정보 페이지
 <div style="display: flex; justify-content: center;">
     <img src="./image/통계.png" width="80%" />
 </div>
@@ -154,7 +154,7 @@ SKN13-1st-3Team/
 - 구별 평균 유가 막대 그래프
 - 날짜별 가격 변동 추이 라인 그래프
 
-### 부가 기능 페이지
+### 4.3 부가 기능 페이지
 <div style="display: flex; justify-content: space-between;">
     <img src="./image/다운로드.png" width="48%" />
     <img src="./image/FAQ.png" width="48%" />
@@ -168,7 +168,7 @@ SKN13-1st-3Team/
 ## 5. 데이터 관리 (ERD)
 ![ERD 다이어그램](./image/ERD.jpg)
 
-### brand 테이블 (브랜드 정보)
+### 5.1 brand 테이블 (브랜드 정보)
 | 필드명 | 데이터 타입 | 설명 | 제약조건 |
 |--------|------------|------|----------|
 | brand_id | INT | 브랜드 고유 식별자 | PRIMARY KEY |
@@ -176,7 +176,7 @@ SKN13-1st-3Team/
 | head_address | VARCHAR(200) | 본사 주소 | |
 | cst_service | VARCHAR(20) | 고객센터 전화번호 | |
 
-### gas_station 테이블 (주유소 정보)
+### 5.2 gas_station 테이블 (주유소 정보)
 | 필드명 | 데이터 타입 | 설명 | 제약조건 |
 |--------|------------|------|----------|
 | station_id | INT | 주유소 고유 식별자 | PRIMARY KEY |
