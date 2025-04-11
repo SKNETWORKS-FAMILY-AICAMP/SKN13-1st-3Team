@@ -6,6 +6,26 @@ import os
 
 st.set_page_config(initial_sidebar_state="collapsed")
 
+# Create 3 columns: left, center, right
+col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([3, 5, 3, 5, 3, 5, 3, 5, 3])  # Adjust ratio if needed
+
+with col6:
+    st.page_link("pages/_faq.py", label="FAQ")
+
+with col8: 
+    st.page_link("pages/_download.py", label = "Downloads")
+
+with col4:
+    st.page_link("pages/_graphs.py", label="Oil Price")
+
+with col2:
+    st.page_link("pages/home.py", label="Home")
+
+
+st.write("                                ")
+st.write("                                ")
+st.subheader("서울시 구별 평균 유가 그래프")
+
 # 데이터베이스 연결
 conn = pymysql.connect(
     host='192.168.0.45',
@@ -46,48 +66,59 @@ chart = alt.Chart(mean_prices_melted).mark_bar(size=10).encode(
     color=alt.Color('유종:N', scale=color_scale, sort=["휘발유", "경유"]),
     xOffset=alt.X('유종:N', sort=["휘발유", "경유"]),
     tooltip=['region', '유종', '가격']
-).properties(width=2000, height=400, title='지역별 평균 유가')
+).properties(width=2000, height=400, title='                                                  ')
 
 st.altair_chart(chart, use_container_width=True)
 
 
 # CSV 파일들이 저장된 폴더 경로
-folder_path = r"C:\Users\Playdata\Documents\SKN13-1st-3Team\crawling"
-column_name = '휘발유'  # 평균을 구할 column 이름
+folder_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "crawling")
+column_name1 = '휘발유'  # 평균을 구할 column 이름
+column_name2 = '경유'
 
 # 결과 저장
-file_avg_list = []
 data = []
-# 폴더 안 모든 CSV 파일 반복
+
+# 폴더 내 CSV 파일 순회
 for filename in sorted(os.listdir(folder_path)):
     if filename.endswith('.csv'):
         file_path = os.path.join(folder_path, filename)
         df = pd.read_csv(file_path)
 
-        # 쉼표 제거 + 숫자로 안전하게 변환
-        if column_name in df.columns:
-            df[column_name] = pd.to_numeric(df[column_name].astype(str).str.replace(',', ''), errors='coerce')
-            avg = df[column_name].mean()
-            date = filename.replace('.csv', '')
-            data.append({'date': date, 'average': avg})
-        else:
-            print(f"'{column_name}' column not found in {filename}")
+        date = filename.replace('.csv', '')
 
-# 날짜별 평균 데이터프레임 생성
+        row = {'date': date}
+
+        for col in [column_name1, column_name2]:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', ''), errors='coerce')
+                row[col] = df[col].mean()
+            else:
+                print(f"'{col}' column not found in {filename}")
+                row[col] = None
+
+        data.append(row)
+
+# 평균 DataFrame 생성
 avg_df = pd.DataFrame(data)
-avg_df['date'] = pd.to_datetime(avg_df['date'])  # 날짜 타입으로 변환
+avg_df['date'] = pd.to_datetime(avg_df['date'])
 avg_df = avg_df.sort_values('date')
 
-# 그래프 그리기
+# 🔄 휘발유와 경유를 long format으로 변환 (그래프에 2개 라인 그리기 위함)
+melted_df = avg_df.melt(id_vars='date', value_vars=[column_name1, column_name2],
+                        var_name='종류', value_name='가격')
 
-chart = alt.Chart(avg_df).mark_line(point=True).encode(
+# 그래프 그리기
+chart = alt.Chart(melted_df).mark_line(point=True).encode(
     x='date:T',
-    y=alt.Y('average:Q', scale=alt.Scale(domain=[1700, 1780])),
-    tooltip=['date:T', 'average:Q']
+    y=alt.Y('가격:Q', scale=alt.Scale(domain=[1580, 1780])),  # 범위 조정 필요시
+    color='종류:N',
+    tooltip=['date:T', '종류:N', '가격:Q']
 ).properties(
-    title='날짜별 평균 가격 변화'
+    title='서울시 날짜별 평균 유가 추이 (휘발유 & 경유)'
 )
 
+st.subheader("서울시 날짜별 평균 유가 그래프 추이")
 st.altair_chart(chart, use_container_width=True)
 
-st.page_link("app.py", label="Go Back")
+st.page_link("app.py", label="Go Home")
