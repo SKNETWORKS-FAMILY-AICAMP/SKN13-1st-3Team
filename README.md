@@ -107,11 +107,11 @@
 
 |종류|TOOL명
 |-----|---|
-|언어| python , sql,<img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">|
-|웹크롤링|selenium
-|데이터저장| Mysql
-|데이터 시각화 : pandas
-화면구현 : streamlit, html, css
+|언어| <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">|
+|웹크롤링|<img src="https://img.shields.io/badge/selenium-4479A1?style=for-the-badge&logo=selenium&logoColor=white">|
+|데이터저장|<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">|
+|데이터 시각화|<img src="https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white">|
+|화면구현|streamlit, html, css
 
 
 <br/><br/>
