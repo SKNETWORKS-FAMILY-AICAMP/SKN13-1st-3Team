@@ -3,7 +3,25 @@ import pandas as pd
 import pymysql
 
 st.set_page_config(initial_sidebar_state="collapsed")
-st.title("⬇️ CSV 다운로드")
+
+# Create 3 columns: left, center, right
+col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([3, 5, 3, 5, 3, 5, 3, 5, 3])  # Adjust ratio if needed
+
+with col6:
+    st.page_link("pages/_faq.py", label="FAQ")
+
+with col8: 
+    st.page_link("pages/_download.py", label = "Downloads")
+
+with col4:
+    st.page_link("pages/_graphs.py", label="Oil Price")
+
+with col2:
+    st.page_link("pages/home.py", label="Home")
+
+st.subheader("                                            ")
+st.subheader("⬇️ CSV 다운로드")
+st.write("이 페이지에서는 당일의 유가 정보를 구별로 다운로드하실 수 있습니다.")
 
 # 데이터베이스 연결
 conn = pymysql.connect(
@@ -42,4 +60,4 @@ st.download_button(
     mime="text/csv"
 )
 
-st.page_link("app.py", label="Go Back")
+st.page_link("app.py", label="Go Home")

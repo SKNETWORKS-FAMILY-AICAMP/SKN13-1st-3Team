@@ -6,6 +6,26 @@ import os
 
 st.set_page_config(initial_sidebar_state="collapsed")
 
+# Create 3 columns: left, center, right
+col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([3, 5, 3, 5, 3, 5, 3, 5, 3])  # Adjust ratio if needed
+
+with col6:
+    st.page_link("pages/_faq.py", label="FAQ")
+
+with col8: 
+    st.page_link("pages/_download.py", label = "Downloads")
+
+with col4:
+    st.page_link("pages/_graphs.py", label="Oil Price")
+
+with col2:
+    st.page_link("pages/home.py", label="Home")
+
+
+st.write("                                ")
+st.write("                                ")
+st.subheader("서울시 구별 평균 유가 그래프")
+
 # 데이터베이스 연결
 conn = pymysql.connect(
     host='192.168.0.45',
@@ -46,7 +66,7 @@ chart = alt.Chart(mean_prices_melted).mark_bar(size=10).encode(
     color=alt.Color('유종:N', scale=color_scale, sort=["휘발유", "경유"]),
     xOffset=alt.X('유종:N', sort=["휘발유", "경유"]),
     tooltip=['region', '유종', '가격']
-).properties(width=2000, height=400, title='지역별 평균 유가')
+).properties(width=2000, height=400, title='                                                  ')
 
 st.altair_chart(chart, use_container_width=True)
 
@@ -73,6 +93,8 @@ for filename in sorted(os.listdir(folder_path)):
         else:
             print(f"'{column_name}' column not found in {filename}")
 
+st.subheader("서울시 날짜별 평균 유가 그래프 추이")
+
 # 날짜별 평균 데이터프레임 생성
 avg_df = pd.DataFrame(data)
 avg_df['date'] = pd.to_datetime(avg_df['date'])  # 날짜 타입으로 변환
@@ -85,9 +107,9 @@ chart = alt.Chart(avg_df).mark_line(point=True).encode(
     y=alt.Y('average:Q', scale=alt.Scale(domain=[1700, 1780])),
     tooltip=['date:T', 'average:Q']
 ).properties(
-    title='날짜별 평균 가격 변화'
+    title='                                           '
 )
 
 st.altair_chart(chart, use_container_width=True)
 
-st.page_link("app.py", label="Go Back")
+st.page_link("app.py", label="Go Home")
