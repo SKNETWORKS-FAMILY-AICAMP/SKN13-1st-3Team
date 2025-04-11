@@ -8,7 +8,7 @@
 | <img src="./image/지우.webp" width="100" height="100"> <br> 이명인 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/leemyeongin2416) | <img src="./image/고라.png" width="100" height="100"> <br> 김동욱 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/boogiewooki02) | <img src="./image/알통.png" width="100" height="100"> <br> 민경재 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/rudwo524) | <img src="./image/푸린.png" width="100" height="100"> <br> 박수빈 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/subin0821) | <img src="./image/꼬부기.png" width="100" height="100"> <br> 지형우 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/JI0617) |
 | PL / Database | Crawling / FE | Crawling / FE | Crawling / FE  | DB / FE |
 
-## 목차
+## :memo:목차
 - 프로젝트 개요
 - 프로젝트 구성
 - 주요 기능 설명
