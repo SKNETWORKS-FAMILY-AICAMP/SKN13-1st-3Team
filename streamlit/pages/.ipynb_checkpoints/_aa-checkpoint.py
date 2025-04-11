@@ -25,7 +25,7 @@ with col8:
     st.page_link("pages/_download.py", label = "Downloads")
 
 with col4:
-    st.page_link("pages/_graphs.py", label="Oil Price")
+    st.page_link("pages/_bb.py", label="Oil Price")
 
 with col2:
     st.page_link("pages/_aa.py", label="Home")

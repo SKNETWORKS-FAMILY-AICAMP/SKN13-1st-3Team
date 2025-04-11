@@ -37,4 +37,4 @@ DELETE FROM brand;
 ALTER TABLE brand AUTO_INCREMENT = 1;
 
 select * from gas_station;
-select * from brand;
+select brand_id from gas_station where station_name = '정호주유소';
