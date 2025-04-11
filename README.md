@@ -1,6 +1,4 @@
 # SKN13-1st-3Team
-![Image](https://github.com/user-attachments/assets/75f6e738-dabe-4c60-98e1-52441828a64f)
-![Image](https://github.com/user-attachments/assets/65a116cf-5ec6-4680-8a08-4c39fd7c400d)
 
 ## 1. 📌 프로젝트 개요
 프로젝트명: 서울시 주유소 현황 및 관련 정보 제공 시스템
@@ -12,12 +10,13 @@
 - 위치정보 기반으로 상세위치 정보 제공 및 고객센터 정보 제공
 - 주유소 및 제공서비스 관련 FAQ 조회 시스템 제공
 
-<img src = https://media.discordapp.net/attachments/1357670409339666442/1360091179147988992/2025-04-11_121628.png?ex=67f9db1e&is=67f8899e&hm=779e986361f42a499bcf68bdf98994293be16581c175a8319f16d88db3423d66&=&format=webp&quality=lossless&width=568&height=618>
 ### 주제 선정 이유(필요성)
 - 변동성이 많은 유가로 유가 상승시에 '소비자' 부담이 커짐
 - 기름값은 지역별, 주유소별로 차이가 있기 때문에 어디서 주유하느냐에 따라서 비용을 절약할 수도 낭비할 수도 있음
--> 각 지역별, 주유소별 가격 비교 및 위치 정보 제공 고객센터 대표번호 및 부가 시설에 따른 정보를 한번에 확인 가능하다면 현명한 소비가 가능 할 것이라고 생각하여 제작.
-  
+-  각 지역별, 주유소별 가격 비교 및 위치 정보 제공 고객센터 대표번호 및 부가 시설에 따른 정보를 한번에 확인 가능하다면 현명한 소비가 가능 할 것이라고 생각하여 제작.
+
+<![Image](https://github.com/user-attachments/assets/75f6e738-dabe-4c60-98e1-52441828a64f)\><![Image](https://github.com/user-attachments/assets/65a116cf-5ec6-4680-8a08-4c39fd7c400d)\>
+
 ## 2. 🎯 주요 기능
 ### 2.1 데이터 크롤링 기능
  서울시 주유소 정보를 제공하는 웹사이트(예: 오피넷, 서울시 열린데이터광장 등)에서 실시간 데이터 수집
