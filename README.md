@@ -9,7 +9,6 @@
 1. ER Diagram 만들기
 2. 요구사항 증명서 만들기
 
-
 ## 2. 🎯 주요 기능
 ### 2.1 데이터 크롤링 기능
  서울시 주유소 정보를 제공하는 웹사이트(예: 오피넷, 서울시 열린데이터광장 등)에서 실시간 데이터 수집
@@ -103,3 +102,33 @@
 서울시 주유소 유가 정보 실시간 확인 가능
 
 사용자 맞춤형 주유소 추천 가능
+
+## 7. 사용한 기술 스택
+
+|종류|TOOL명
+|-----|---|
+|언어| python , sql
+|웹크롤링|selenium
+|데이터저장| Mysql
+|데이터 시각화 : pandas
+화면구현 : streamlit, html, css
+
+
+<br/><br/>
+<p align="center">
+  <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">
+  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white">
+  <img src="https://img.shields.io/badge/Streamlit-%23FE4B4B.svg?style=for-the-badge&logo=streamlit&logoColor=white">
+  <img src="https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=Selenium&logoColor=white">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
+  <img src="https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white">
+  <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white">
+<!--   <img src="https://img.shields.io/badge/Windows%2011-%230079d5.svg?style=for-the-badge&logo=Windows%2011&logoColor=white"> -->
+</p>
+<br/><br/>
+<br/><br/>
