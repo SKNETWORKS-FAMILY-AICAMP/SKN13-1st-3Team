@@ -15,7 +15,7 @@
 - 기름값은 지역별, 주유소별로 차이가 있기 때문에 어디서 주유하느냐에 따라서 비용을 절약할 수도 낭비할 수도 있음
 -  각 지역별, 주유소별 가격 비교 및 위치 정보 제공 고객센터 대표번호 및 부가 시설에 따른 정보를 한번에 확인 가능하다면 현명한 소비가 가능 할 것이라고 생각하여 제작.
 
-<![Image](https://github.com/user-attachments/assets/75f6e738-dabe-4c60-98e1-52441828a64f)/><![Image](https://github.com/user-attachments/assets/65a116cf-5ec6-4680-8a08-4c39fd7c400d)/>
+[Image](https://github.com/user-attachments/assets/75f6e738-dabe-4c60-98e1-52441828a64f),[Image](https://github.com/user-attachments/assets/65a116cf-5ec6-4680-8a08-4c39fd7c400d)
 
 ## 2. 🎯 주요 기능
 ### 2.1 데이터 크롤링 기능
